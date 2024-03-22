@@ -1,79 +1,104 @@
-const numbers = document.getElementsByClassName("#");
+const zeroBtn = document.getElementById("0");
+const oneBtn = document.getElementById("1");
+const twoBtn = document.getElementById("2");
+const threeBtn = document.getElementById("3");
+const fourBtn = document.getElementById("4");
+const fiveBtn = document.getElementById("5");
+const sixBtn = document.getElementById("6");
+const sevenBtn = document.getElementById("7");
+const eightBtn = document.getElementById("8");
+const nineBtn = document.getElementById("9");
+
 const addBtn = document.getElementById("add");
-const calcDisplay = document.querySelector(".user-input");
-let operator;
+const subtractBtn = document.getElementById("subtract");
+const multiplyBtn = document.getElementById("multiply");
+const divideBtn = document.getElementById("divide");
+
+const calculatorDisplay = document.querySelector(".user-input");
+
+const userInputArray = new Array(2);
+userInputArray[0] = 0;
+userInputArray[1] = 0;
+
 let leftSide;
 let rightSide;
-let leftSideDigitCount;
-let rightSideDigitCount;
-let gettingRightSide;
-let gettingLeftSide;
-let operandClickCount = 0;
-let total = 0;
-function getLeftSide() {
-    leftSideDigitCount = 0;
-    gettingRightSide = false;
-    gettingLeftSide = true;
-    for (let i = 0; i < numbers.length; i++) {
-        numbers[i].addEventListener("click", () => {
-            if (!gettingRightSide) {
-                if (leftSideDigitCount == 0) {
-                    calcDisplay.textContent = numbers[i].textContent;
-                } else {
-                    calcDisplay.textContent += numbers[i].textContent;
-                }
-                leftSide = parseInt(calcDisplay.textContent);
-                leftSideDigitCount++;
-            }
-        })
-    }
+let operator;
+let count = 0;
+let operatorClickCount = 0;
+let total;
 
-    //console.log("Left: " + calcDisplay.textContent)
+function operate(leftSide, rightSide, operator) {
+    if (operator == "+") {
+        total = leftSide + rightSide;
+    } else if (operator == "-") {
+        total = leftSide - rightSide;
+    }
+    userInputArray[0] = total;
+    userInputArray[1] = 0;
+    calculatorDisplay.textContent = total;
 }
 
-function getRightSide() {
-    rightSideDigitCount = 0;
-    gettingRightSide = true;
-    gettingLeftSide = false;
-    for (let i = 0; i < numbers.length; i++) {
-        numbers[i].addEventListener("click", () => {
-            if (!gettingLeftSide) {
-                if (rightSideDigitCount == 0) {
-                    calcDisplay.textContent = numbers[i].textContent;
-                } else {
-                    calcDisplay.textContent += numbers[i].textContent;
-                }
-                rightSide = parseInt(calcDisplay.textContent);
-                rightSideDigitCount++;
-            }
-        })
+function updateCalculatorDisplay(str) {
+    if (str != "perform operation") {
+        if (count == 0) {
+            calculatorDisplay.textContent = str
+        } else {
+            calculatorDisplay.textContent += str;
+        }
+
+        if (operatorClickCount == 0) {
+            userInputArray[0] = parseInt(calculatorDisplay.textContent);
+        } else if (operatorClickCount >= 1) {
+            userInputArray[1] = parseInt(calculatorDisplay.textContent);
+        }
+
+        //don't increment count if the user keeps pressing 0
+        if (!(calculatorDisplay.textContent.length == 1 && calculatorDisplay.textContent == 0)) {
+            count++;
+        }
     }
 
-    //console.log("Right: "+ calcDisplay.textContent)
+
+    if (str == "perform operation") {
+        operatorClickCount++;
+        count = 0;
+        operate(userInputArray[0], userInputArray[1], operator);
+    }
+
+    // console.log("Count " + count);
+    // console.log(str);
+    // console.log("Click count :" + operatorClickCount);
+    // console.log("First Index " + userInputArray[0]);
+    // console.log("Second Index " + userInputArray[1]);
+    // console.log(userInputArray)
 }
 
-// function operate(leftSide, rightSide, operator) {//directions say not to use eval()
-//     total = leftSide + rightSide;
-//     if (operator == "+") {
-//         calcDisplay.textContent = total;
-//     }
-//     leftSide = total;
-//     rightSide = 0;
-//     operandClickCount = 0;
-//     rightSideDigitCount = 0;
-//     leftSideDigitCount = 0;
-//     console.log(leftSide);
-//     console.log(rightSide);
-// }
+zeroBtn.addEventListener("click", () => {
+    updateCalculatorDisplay(zeroBtn.textContent);
+})
 
-// getLeftSide();//first time
-// addBtn.addEventListener("click", () => {
-//     operator = document.getElementById("add").textContent;
-//     if (operandClickCount < 1) {
-//         getRightSide();
-//         operandClickCount++;
-//         console.log(operandClickCount);
-//     } else {
-//         operate(leftSide, rightSide, operator);
-//     }
-// })
+oneBtn.addEventListener("click", () => {
+    updateCalculatorDisplay(oneBtn.textContent);
+})
+
+twoBtn.addEventListener("click", () => {
+    updateCalculatorDisplay(twoBtn.textContent);
+})
+
+threeBtn.addEventListener("click", () => {
+    updateCalculatorDisplay(threeBtn.textContent);
+})
+
+fourBtn.addEventListener("click", () => {
+    updateCalculatorDisplay(fourBtn.textContent);
+})
+
+addBtn.addEventListener("click", () => {
+    operator = "+"
+    updateCalculatorDisplay("perform operation");
+})
+
+subtractBtn.addEventListener("click", () => {
+    operator = "-"
+    updateCalculatorDisplay("perform operation");
+})
