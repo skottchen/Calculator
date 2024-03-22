@@ -28,6 +28,8 @@ let operatorClickCount = 0;
 let total;
 
 function operate(leftSide, rightSide, operator) {
+    operatorClickCount++;
+    count = 0;
     if (operator == "+") {
         total = leftSide + rightSide;
     } else if (operator == "-") {
@@ -39,32 +41,22 @@ function operate(leftSide, rightSide, operator) {
 }
 
 function updateCalculatorDisplay(str) {
-    if (str != "perform operation") {
-        if (count == 0) {
-            calculatorDisplay.textContent = str
-        } else {
-            calculatorDisplay.textContent += str;
-        }
-
-        if (operatorClickCount == 0) {
-            userInputArray[0] = parseInt(calculatorDisplay.textContent);
-        } else if (operatorClickCount >= 1) {
-            userInputArray[1] = parseInt(calculatorDisplay.textContent);
-        }
-
-        //don't increment count if the user keeps pressing 0
-        if (!(calculatorDisplay.textContent.length == 1 && calculatorDisplay.textContent == 0)) {
-            count++;
-        }
+    if (count == 0) {
+        calculatorDisplay.textContent = str
+    } else {
+        calculatorDisplay.textContent += str;
     }
 
-
-    if (str == "perform operation") {
-        operatorClickCount++;
-        count = 0;
-        operate(userInputArray[0], userInputArray[1], operator);
+    if (operatorClickCount == 0) {
+        userInputArray[0] = parseInt(calculatorDisplay.textContent);
+    } else if (operatorClickCount >= 1) {
+        userInputArray[1] = parseInt(calculatorDisplay.textContent);
     }
 
+    //don't increment count if the user keeps pressing 0
+    if (!(calculatorDisplay.textContent.length == 1 && calculatorDisplay.textContent == 0)) {
+        count++;
+    }
     // console.log("Count " + count);
     // console.log(str);
     // console.log("Click count :" + operatorClickCount);
@@ -95,10 +87,10 @@ fourBtn.addEventListener("click", () => {
 
 addBtn.addEventListener("click", () => {
     operator = "+"
-    updateCalculatorDisplay("perform operation");
+    operate(userInputArray[0], userInputArray[1], operator)
 })
 
 subtractBtn.addEventListener("click", () => {
     operator = "-"
-    updateCalculatorDisplay("perform operation");
+    operate(userInputArray[0], userInputArray[1], operator)
 })
