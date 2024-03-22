@@ -16,32 +16,33 @@ const divideBtn = document.getElementById("divide");
 
 const calculatorDisplay = document.querySelector(".user-input");
 
-const userInputArray = new Array(2);
-userInputArray[0] = 0;
-userInputArray[1] = 0;
+const userInputArray = [0, 0, 0];
 
 let leftSide;
 let rightSide;
 let operator;
-let count = 0;
+let initialInput = true;
 let operatorClickCount = 0;
 let total;
 
-function operate(leftSide, rightSide, operator) {
+function operate(leftSide, rightSide) {
     operatorClickCount++;
-    count = 0;
-    if (operator == "+") {
+    initialInput = true;
+    if (userInputArray.indexOf("+") != -1) {
         total = leftSide + rightSide;
-    } else if (operator == "-") {
+    } else if (userInputArray.indexOf("-") != -1) {
         total = leftSide - rightSide;
+    } else {
+        total = leftSide; //for case when operator is not initialized
     }
     userInputArray[0] = total;
-    userInputArray[1] = 0;
+    userInputArray[2] = 0;
     calculatorDisplay.textContent = total;
+    console.log(userInputArray)
 }
 
 function updateCalculatorDisplay(str) {
-    if (count == 0) {
+    if (initialInput) {
         calculatorDisplay.textContent = str
     } else {
         calculatorDisplay.textContent += str;
@@ -50,19 +51,20 @@ function updateCalculatorDisplay(str) {
     if (operatorClickCount == 0) {
         userInputArray[0] = parseInt(calculatorDisplay.textContent);
     } else if (operatorClickCount >= 1) {
-        userInputArray[1] = parseInt(calculatorDisplay.textContent);
+        userInputArray[2] = parseInt(calculatorDisplay.textContent);
     }
 
-    //don't increment count if the user keeps pressing 0
+    //don't increase number of digits on the screen if the user keeps pressing 0
     if (!(calculatorDisplay.textContent.length == 1 && calculatorDisplay.textContent == 0)) {
-        count++;
+        initialInput = false;
     }
-    // console.log("Count " + count);
-    // console.log(str);
-    // console.log("Click count :" + operatorClickCount);
-    // console.log("First Index " + userInputArray[0]);
-    // console.log("Second Index " + userInputArray[1]);
-    // console.log(userInputArray)
+    console.log("Initial Input: " + initialInput);
+    console.log(str);
+    console.log("Click count :" + operatorClickCount);
+    console.log("First Index " + userInputArray[0]);
+    console.log("Second Index " + userInputArray[1]);
+    console.log("Third Index " + userInputArray[2]);
+    console.log(userInputArray)
 }
 
 zeroBtn.addEventListener("click", () => {
@@ -86,11 +88,11 @@ fourBtn.addEventListener("click", () => {
 })
 
 addBtn.addEventListener("click", () => {
-    operator = "+"
-    operate(userInputArray[0], userInputArray[1], operator)
+    operate(userInputArray[0], userInputArray[2])
+    userInputArray[1] = "+"
 })
 
 subtractBtn.addEventListener("click", () => {
-    operator = "-"
-    operate(userInputArray[0], userInputArray[1], operator)
+    operate(userInputArray[0], userInputArray[2])
+    userInputArray[1] = "-"
 })
