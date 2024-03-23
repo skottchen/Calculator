@@ -24,39 +24,73 @@ let operator;
 let initialInput = true;
 let operatorClickCount = 0;
 let total;
+let digitCount = 0;//counts how many digits are on the screen
 
-function operate(leftSide, rightSide) {
-    operatorClickCount++;
-    initialInput = true;
-    if (userInputArray.indexOf("+") != -1) {
-        total = leftSide + rightSide;
-    } else if (userInputArray.indexOf("-") != -1) {
-        total = leftSide - rightSide;
-    } else {
-        total = leftSide; //for case when operator is not initialized
+function operate(left, right) {
+    if (calculatorDisplay.textContent != "lmao") {
+        operatorClickCount++;
+        initialInput = true;
+        digitCount = 0;
+        leftSide = parseInt(left);
+        rightSide = parseInt(right);
+        if (userInputArray.indexOf("+") != -1 && typeof right === "string") {
+            total = leftSide + rightSide;
+        } else if (userInputArray.indexOf("-") != -1) {
+            total = leftSide - rightSide;
+        } else if (userInputArray.indexOf("*") != -1) {
+            if (right === '0') {//the 0 was entered by the user
+                total = 0;
+            } else if (right != 0) {//regular cases of multiplication
+                total = rightSide * leftSide;
+            } else {//case for when nothing has been entered on the right side
+                total = leftSide;
+            }
+        } else if (userInputArray.indexOf("/") != -1 && right != 0) {//regular cases for division
+            total = (leftSide / rightSide);
+        } else if (userInputArray.indexOf("/") != -1 && right === '0') {//user tried to divide by 0
+            total = "lmao";
+        } else {
+            total = leftSide; //for case when operator is not initialized
+        }
+
+        userInputArray[0] = total;
+        userInputArray[2] = 0;
+        calculatorDisplay.textContent = total;
+        console.log(userInputArray);
     }
-    userInputArray[0] = total;
-    userInputArray[2] = 0;
-    calculatorDisplay.textContent = total;
-    console.log(userInputArray)
 }
 
 function updateCalculatorDisplay(str) {
+    if (calculatorDisplay.textContent == "lmao") {
+        initialInput = true;
+        operatorClickCount = 0;
+        userInputArray[0] = userInputArray[2];
+        userInputArray[2] = 0;
+    }
+
     if (initialInput) {
         calculatorDisplay.textContent = str
-    } else {
+    } else if (digitCount < 10) {
         calculatorDisplay.textContent += str;
+    } else if (digitCount == 10) {
+        alert("Number of digits exceeded for calculator screen size!");
     }
 
     if (operatorClickCount == 0) {
-        userInputArray[0] = parseInt(calculatorDisplay.textContent);
+        userInputArray[0] = (calculatorDisplay.textContent);
     } else if (operatorClickCount >= 1) {
-        userInputArray[2] = parseInt(calculatorDisplay.textContent);
+        userInputArray[2] = (calculatorDisplay.textContent);
     }
 
     //don't increase number of digits on the screen if the user keeps pressing 0
     if (!(calculatorDisplay.textContent.length == 1 && calculatorDisplay.textContent == 0)) {
         initialInput = false;
+        if (digitCount < 10) {
+            digitCount++
+        } else {
+            digitCount = 10;
+        }
+        console.log("Digit count " + digitCount);
     }
     console.log("Initial Input: " + initialInput);
     console.log(str);
@@ -87,6 +121,26 @@ fourBtn.addEventListener("click", () => {
     updateCalculatorDisplay(fourBtn.textContent);
 })
 
+fiveBtn.addEventListener("click", () => {
+    updateCalculatorDisplay(fiveBtn.textContent);
+})
+
+sixBtn.addEventListener("click", () => {
+    updateCalculatorDisplay(sixBtn.textContent);
+})
+
+sevenBtn.addEventListener("click", () => {
+    updateCalculatorDisplay(sevenBtn.textContent);
+})
+
+eightBtn.addEventListener("click", () => {
+    updateCalculatorDisplay(eightBtn.textContent);
+})
+
+nineBtn.addEventListener("click", () => {
+    updateCalculatorDisplay(nineBtn.textContent);
+})
+
 addBtn.addEventListener("click", () => {
     operate(userInputArray[0], userInputArray[2])
     userInputArray[1] = "+"
@@ -96,3 +150,14 @@ subtractBtn.addEventListener("click", () => {
     operate(userInputArray[0], userInputArray[2])
     userInputArray[1] = "-"
 })
+
+multiplyBtn.addEventListener("click", () => {
+    operate(userInputArray[0], userInputArray[2])
+    userInputArray[1] = "*"
+})
+
+divideBtn.addEventListener("click", () => {
+    operate(userInputArray[0], userInputArray[2])
+    userInputArray[1] = "/"
+})
+
