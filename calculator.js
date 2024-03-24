@@ -200,7 +200,7 @@ changeSignBtn.addEventListener("click", () => {
 delBtn.addEventListener("click", () => {
     if (calculatorDisplay.textContent.length != 1) {
         calculatorDisplay.textContent = calculatorDisplay.textContent.slice(0, calculatorDisplay.textContent.length - 1)
-        if (inputIncludeDecimals != calculatorDisplay.textContent.includes(".")) {//check whether the decimal was deleted
+        if (!calculatorDisplay.textContent.includes(".")) {//check whether the decimal was deleted
             decimalCount = 0;
         }
     } else {
