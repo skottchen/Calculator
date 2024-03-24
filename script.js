@@ -30,7 +30,6 @@ let operator;
 let initialInput = true;
 let operatorClickCount = 0;
 let total;
-let digitCount = 0;//counts how many digits are on the screen
 let equalsBtnClicked = false;
 let decimalCount = 0;
 
@@ -38,7 +37,6 @@ function operate(left, right) {
     if (calculatorDisplay.textContent != "lmao") {
         operatorClickCount++;
         initialInput = true;
-        digitCount = 0;
         leftSide = parseFloat(left);
         rightSide = parseFloat(right);
         decimalCount = 0;
@@ -74,7 +72,7 @@ function operate(left, right) {
             }
         }
         calculatorDisplay.textContent = total;
-        // console.log(userInputArray);
+        console.log(userInputArray);
     }
 }
 
@@ -88,9 +86,9 @@ function updateCalculatorDisplay(str) {
 
     if (initialInput) {
         calculatorDisplay.textContent = str
-    } else if (digitCount < 10) {
+    } else if (calculatorDisplay.textContent.length < 10) {
         calculatorDisplay.textContent += str;
-    } else if (digitCount == 10) {
+    } else if (calculatorDisplay.textContent.length == 10) {
         alert("Number of digits exceeded for calculator screen size!");
     }
 
@@ -103,12 +101,6 @@ function updateCalculatorDisplay(str) {
     //don't increase number of digits on the screen if the user keeps pressing 0
     if (!(calculatorDisplay.textContent.length == 1 && calculatorDisplay.textContent == 0)) {
         initialInput = false;
-        if (digitCount < 10) {
-            digitCount++
-        } else {
-            digitCount = 10;
-        }
-        console.log("Digit count " + digitCount);
     }
     //A window into the inner magic of the calculator
     console.log("Initial Input: " + initialInput);
@@ -126,7 +118,6 @@ function resetCalculator() {
     }
     initialInput = true;
     operatorClickCount = 0;
-    digitCount = 0;
     decimalCount = 0;
     equalsBtnClicked = false;
 }
@@ -209,10 +200,8 @@ changeSignBtn.addEventListener("click", () => {
 delBtn.addEventListener("click", () => {
     if (calculatorDisplay.textContent.length != 1) {
         calculatorDisplay.textContent = calculatorDisplay.textContent.slice(0, calculatorDisplay.textContent.length - 1)
-        digitCount -= 1;
     } else {
         calculatorDisplay.textContent = 0;
-        digitCount = 0;
     }
     initialInput = true;
     updateCalculatorDisplay(calculatorDisplay.textContent);
@@ -224,8 +213,13 @@ decimal.addEventListener("click", () => {
     if (decimalCount == 1) {
         initialInput = true;
 
-        if(calculatorDisplay.textContent != "lmao"){
-            calculatorDisplay.textContent = calculatorDisplay.textContent + "."
+        if (calculatorDisplay.textContent != "lmao") {
+
+            if (operatorClickCount >= 1) {
+                calculatorDisplay.textContent = "0.";
+            } else {
+                calculatorDisplay.textContent = calculatorDisplay.textContent + ".";
+            }
         }
         updateCalculatorDisplay(calculatorDisplay.textContent);
     }
