@@ -15,8 +15,10 @@ const multiplyBtn = document.getElementById("multiply");
 const divideBtn = document.getElementById("divide");
 
 const calculatorDisplay = document.querySelector(".user-input");
+const equalsBtn = document.getElementById("equals");
+const clearBtn = document.getElementById("clear");
 
-const userInputArray = [0, 0, 0];
+let userInputArray = [0, 0, 0];
 
 let leftSide;
 let rightSide;
@@ -25,6 +27,7 @@ let initialInput = true;
 let operatorClickCount = 0;
 let total;
 let digitCount = 0;//counts how many digits are on the screen
+let equalsBtnClicked = false;
 
 function operate(left, right) {
     if (calculatorDisplay.textContent != "lmao") {
@@ -56,7 +59,7 @@ function operate(left, right) {
         userInputArray[0] = total;
         userInputArray[2] = 0;
         calculatorDisplay.textContent = total;
-        console.log(userInputArray);
+        // console.log(userInputArray);
     }
 }
 
@@ -92,6 +95,7 @@ function updateCalculatorDisplay(str) {
         }
         console.log("Digit count " + digitCount);
     }
+    //A window into the inner magic of the calculator
     console.log("Initial Input: " + initialInput);
     console.log(str);
     console.log("Click count :" + operatorClickCount);
@@ -99,6 +103,17 @@ function updateCalculatorDisplay(str) {
     console.log("Second Index " + userInputArray[1]);
     console.log("Third Index " + userInputArray[2]);
     console.log(userInputArray)
+}
+
+function resetCalculator() {
+    if (!equalsBtnClicked) {//complete reset
+        calculatorDisplay.textContent = 0;
+        userInputArray = [0, 0, 0];
+    }
+    initialInput = true;
+    operatorClickCount = 0;
+    digitCount = 0;
+    equalsBtnClicked = false;
 }
 
 zeroBtn.addEventListener("click", () => {
@@ -159,5 +174,15 @@ multiplyBtn.addEventListener("click", () => {
 divideBtn.addEventListener("click", () => {
     operate(userInputArray[0], userInputArray[2])
     userInputArray[1] = "/"
+})
+
+equalsBtn.addEventListener(("click"), () => {
+    equalsBtnClicked = true;
+    operate(userInputArray[0], userInputArray[2]);
+    resetCalculator();
+})
+
+clearBtn.addEventListener(("click"), () => {
+    resetCalculator();
 })
 
