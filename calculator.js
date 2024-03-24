@@ -54,7 +54,7 @@ function operate(left, right) {
             }
         } else if (userInputArray.indexOf("/") != -1 && right != 0) {//regular cases for division
             total = (leftSide / rightSide);
-        } else if (userInputArray.indexOf("/") != -1 && (right === '0' || right === '0.')) {//user tried to divide by 0
+        } else if (userInputArray.indexOf("/") != -1 && (rightSide.toFixed(1) === '0.0')) {//user tried to divide by 0
             total = "lmao";
         } else {
             total = leftSide; //for case when operator is not initialized
