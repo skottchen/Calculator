@@ -216,7 +216,8 @@ decimal.addEventListener("click", () => {
         if (calculatorDisplay.textContent != "lmao") {
 
             if (operatorClickCount >= 1) {
-                calculatorDisplay.textContent = "0.";
+                userInputArray[2] += ".";
+                calculatorDisplay.textContent = userInputArray[2];
             } else {
                 calculatorDisplay.textContent = calculatorDisplay.textContent + ".";
             }
