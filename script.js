@@ -223,7 +223,10 @@ decimal.addEventListener("click", () => {
 
     if (decimalCount == 1) {
         initialInput = true;
-        calculatorDisplay.textContent = calculatorDisplay.textContent + "."
+
+        if(calculatorDisplay.textContent != "lmao"){
+            calculatorDisplay.textContent = calculatorDisplay.textContent + "."
+        }
         updateCalculatorDisplay(calculatorDisplay.textContent);
     }
 })
