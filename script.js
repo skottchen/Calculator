@@ -17,6 +17,10 @@ const divideBtn = document.getElementById("divide");
 const calculatorDisplay = document.querySelector(".user-input");
 const equalsBtn = document.getElementById("equals");
 const clearBtn = document.getElementById("clear");
+const changeSignBtn = document.getElementById("posneg");
+
+const delBtn = document.getElementById("del");
+const decimal = document.getElementById("decimal");
 
 let userInputArray = [0, 0, 0];
 
@@ -28,14 +32,16 @@ let operatorClickCount = 0;
 let total;
 let digitCount = 0;//counts how many digits are on the screen
 let equalsBtnClicked = false;
+let decimalCount = 0;
 
 function operate(left, right) {
     if (calculatorDisplay.textContent != "lmao") {
         operatorClickCount++;
         initialInput = true;
         digitCount = 0;
-        leftSide = parseInt(left);
-        rightSide = parseInt(right);
+        leftSide = parseFloat(left);
+        rightSide = parseFloat(right);
+        decimalCount = 0;
         if (userInputArray.indexOf("+") != -1 && typeof right === "string") {
             total = leftSide + rightSide;
         } else if (userInputArray.indexOf("-") != -1) {
@@ -58,6 +64,15 @@ function operate(left, right) {
 
         userInputArray[0] = total;
         userInputArray[2] = 0;
+
+        if (total.toString().length > 10) {
+            if (total % 1 != 0) {
+                total = total.toFixed(2);
+            } else {
+                alert(total);
+                resetCalculator();
+            }
+        }
         calculatorDisplay.textContent = total;
         // console.log(userInputArray);
     }
@@ -97,7 +112,6 @@ function updateCalculatorDisplay(str) {
     }
     //A window into the inner magic of the calculator
     console.log("Initial Input: " + initialInput);
-    console.log(str);
     console.log("Click count :" + operatorClickCount);
     console.log("First Index " + userInputArray[0]);
     console.log("Second Index " + userInputArray[1]);
@@ -106,13 +120,14 @@ function updateCalculatorDisplay(str) {
 }
 
 function resetCalculator() {
-    if (!equalsBtnClicked) {//complete reset
+    if (!equalsBtnClicked) {//reset everything
         calculatorDisplay.textContent = 0;
         userInputArray = [0, 0, 0];
     }
     initialInput = true;
     operatorClickCount = 0;
     digitCount = 0;
+    decimalCount = 0;
     equalsBtnClicked = false;
 }
 
@@ -182,7 +197,34 @@ equalsBtn.addEventListener(("click"), () => {
     resetCalculator();
 })
 
-clearBtn.addEventListener(("click"), () => {
+clearBtn.addEventListener("click", () => {
     resetCalculator();
+})
+
+changeSignBtn.addEventListener("click", () => {
+    initialInput = true;//overwrite the previous element in userInputArray
+    updateCalculatorDisplay(-calculatorDisplay.textContent);
+})
+
+delBtn.addEventListener("click", () => {
+    if (calculatorDisplay.textContent.length != 1) {
+        calculatorDisplay.textContent = calculatorDisplay.textContent.slice(0, calculatorDisplay.textContent.length - 1)
+        digitCount -= 1;
+    } else {
+        calculatorDisplay.textContent = 0;
+        digitCount = 0;
+    }
+    initialInput = true;
+    updateCalculatorDisplay(calculatorDisplay.textContent);
+})
+
+decimal.addEventListener("click", () => {
+    decimalCount++;
+
+    if (decimalCount == 1) {
+        initialInput = true;
+        calculatorDisplay.textContent = calculatorDisplay.textContent + "."
+        updateCalculatorDisplay(calculatorDisplay.textContent);
+    }
 })
 
