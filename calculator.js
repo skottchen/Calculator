@@ -32,6 +32,8 @@ let operatorClickCount = 0;
 let total;
 let equalsBtnClicked = false;
 let decimalCount = 0;
+const regexDecimalAllZeros = /^[0.]*0$/; //check that input (integer or decimal) contains all 0s
+const regexIntegerAllZeros = /^0+$/;
 
 function operate(left, right) {
     if (calculatorDisplay.textContent != "lmao") {
@@ -40,23 +42,19 @@ function operate(left, right) {
         leftSide = parseFloat(left);
         rightSide = parseFloat(right);
         decimalCount = 0;
-        if (userInputArray.indexOf("+") != -1 && typeof right === "string") {
-            total = leftSide + rightSide;
-        } else if (userInputArray.indexOf("-") != -1) {
-            total = leftSide - rightSide;
-        } else if (userInputArray.indexOf("*") != -1) {
-            if (right === '0') {//the 0 was entered by the user
-                total = 0;
-            } else if (right != 0) {//regular cases of multiplication
+        if (typeof right === "string") {
+            if (userInputArray.indexOf("+") != -1) {
+                total = leftSide + rightSide;
+            } else if (userInputArray.indexOf("-") != -1) {
+                total = leftSide - rightSide;
+            } else if (userInputArray.indexOf("*") != -1) {
                 total = rightSide * leftSide;
-            } else {//case for when nothing has been entered on the right side
-                total = leftSide;
-            }
-        } else if (userInputArray.indexOf("/") != -1 && typeof right === "string") {
-            if (userInputArray.indexOf("/") != -1 && (rightSide.toFixed(1) === '0.0')) {//user tried to divide by 0
-                total = "lmao";
-            } else {
-                total = leftSide / rightSide;
+            } else if (userInputArray.indexOf("/") != -1) {
+                if (regexDecimalAllZeros.test(rightSide) == true || regexIntegerAllZeros.test(rightSide) == true) {//user tried to divide by 0
+                    total = "lmao";
+                } else {
+                    total = leftSide / rightSide;
+                }
             }
         } else {
             total = leftSide; //for case when operator is not initialized
@@ -74,7 +72,7 @@ function operate(left, right) {
             }
         }
         calculatorDisplay.textContent = total;
-        console.log(userInputArray);
+        //console.log(userInputArray);
     }
 }
 
@@ -216,8 +214,10 @@ decimal.addEventListener("click", () => {
         initialInput = true;
 
         if (calculatorDisplay.textContent != "lmao") {
-
-            if (operatorClickCount >= 1) {
+            if (operatorClickCount == 0) {
+                userInputArray[0] = "0.";
+                calculatorDisplay.textContent = userInputArray[0];
+            } else if (operatorClickCount >= 1) {
                 userInputArray[2] += ".";
                 calculatorDisplay.textContent = userInputArray[2];
             } else {
