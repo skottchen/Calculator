@@ -52,10 +52,12 @@ function operate(left, right) {
             } else {//case for when nothing has been entered on the right side
                 total = leftSide;
             }
-        } else if (userInputArray.indexOf("/") != -1 && right != 0) {//regular cases for division
-            total = (leftSide / rightSide);
-        } else if (userInputArray.indexOf("/") != -1 && (rightSide.toFixed(1) === '0.0')) {//user tried to divide by 0
-            total = "lmao";
+        } else if (userInputArray.indexOf("/") != -1 && typeof right === "string") {
+            if (userInputArray.indexOf("/") != -1 && (rightSide.toFixed(1) === '0.0')) {//user tried to divide by 0
+                total = "lmao";
+            } else {
+                total = leftSide / rightSide;
+            }
         } else {
             total = leftSide; //for case when operator is not initialized
         }
