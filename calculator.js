@@ -200,6 +200,9 @@ changeSignBtn.addEventListener("click", () => {
 delBtn.addEventListener("click", () => {
     if (calculatorDisplay.textContent.length != 1) {
         calculatorDisplay.textContent = calculatorDisplay.textContent.slice(0, calculatorDisplay.textContent.length - 1)
+        if (inputIncludeDecimals != calculatorDisplay.textContent.includes(".")) {//check whether the decimal was deleted
+            decimalCount = 0;
+        }
     } else {
         calculatorDisplay.textContent = 0;
     }
@@ -215,7 +218,11 @@ decimal.addEventListener("click", () => {
 
         if (calculatorDisplay.textContent != "lmao") {
             if (operatorClickCount == 0) {
-                userInputArray[0] = "0.";
+                if (userInputArray[0] == 0) {
+                    userInputArray[0] = "0.";
+                } else {
+                    userInputArray[0] += "."
+                }
                 calculatorDisplay.textContent = userInputArray[0];
             } else if (operatorClickCount >= 1) {
                 userInputArray[2] += ".";
