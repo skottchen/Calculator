@@ -134,12 +134,14 @@ clearBtn.addEventListener("click", () => {
 })
 
 changeSignBtn.addEventListener("click", () => {
-    initialInput = true;//overwrite the previous element in userInputArray
-    updateCalculatorDisplay(-calculatorDisplay.textContent);
+    if (calculatorDisplay.textContent != "lmao") {
+        initialInput = true;//overwrite the previous element in userInputArray
+        updateCalculatorDisplay(-calculatorDisplay.textContent);
+    }
 })
 
 delBtn.addEventListener("click", () => {
-    if (calculatorDisplay.textContent.length != 1) {
+    if (calculatorDisplay.textContent.length != 1 && calculatorDisplay.textContent != "lmao") {
         calculatorDisplay.textContent = calculatorDisplay.textContent.slice(0, calculatorDisplay.textContent.length - 1)
         if (!calculatorDisplay.textContent.includes(".")) {//check whether the decimal was deleted
             decimalCount = 0;
