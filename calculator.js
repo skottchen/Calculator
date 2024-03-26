@@ -159,7 +159,7 @@ decimal.addEventListener("click", () => {
 
         if (calculatorDisplay.textContent != "lmao") {
             if (operatorClickCount == 0) {
-                if (userInputArray[0] == 0) {
+                if (userInputArray[0] === 0 || (userInputArray[1] == "=" && userInputArray[2] === 0)) {
                     userInputArray[0] = "0.";
                 } else {
                     userInputArray[0] += "."
